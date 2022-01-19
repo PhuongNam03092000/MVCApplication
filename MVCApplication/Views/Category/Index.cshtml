@@ -58,12 +58,12 @@
                             }
 
                             <td class="btn-group btn-block btn-lg">
-                                <button class="btn btn-warning" data-toggle="modal" data-target="#modelId"
-                                        onclick="CreateModal('@Url.Action("Details","Categories",new {id = category.id})')">
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#modalIdCategory"
+                                        onclick="CreateModal('@Url.Action("Details","Category",new {id = category.id})')">
                                     Details
                                 </button>
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#modelId"
-                                        onclick="CreateModal('@Url.Action("Delete","Categories",new { id = category.id })')">
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalIdCategory"
+                                        onclick="CreateModal('@Url.Action("Delete","Category",new { id = category.id })')">
                                     Delete
                                 </button>
                             </td>
@@ -114,10 +114,10 @@
         </div>
     </div>
 </div>
-<div class="modal fade modalcreate" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+<div class="modal fade modalcreate" id="modalIdCategory" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
      data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modelContent">
+        <div class="modal-content model-create" id="modelContent">
         </div>
     </div>
 </div>

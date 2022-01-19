@@ -18,7 +18,7 @@ namespace MVCApplication.Controllers
         // GET: CategoryController
         public ActionResult Index(string sortOrder, string searchString, int pageIndex = 1)
         {
-            int pageSize = 4;
+            int pageSize = 8;
             int count;
             var items = _categoryService.Filter(sortOrder, searchString, pageIndex, pageSize, out count);
             var category = new CategoryDTO();
@@ -36,7 +36,7 @@ namespace MVCApplication.Controllers
         public async Task<ActionResult> Details(int id)
         {
             var category = await _categoryService.GetById(id);
-            return PartialView(@"~/Views/Category/Details.cshtml",category);
+            return PartialView(@"~/Views/Category/Details.cshtml", category);
         }
 
         // POST: CategoryController/Create
@@ -49,47 +49,37 @@ namespace MVCApplication.Controllers
            }
            return RedirectToAction(nameof(Index));
         }
-
-        // GET: CategoryController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CategoryDTO category)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                await _categoryService.Update(category);
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: CategoryController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var categroy = await _categoryService.GetById(id);
+            if(categroy!=null){
+                  return PartialView(@"~/Views/Category/DeleteConfirm.cshtml",categroy);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(CategoryDTO category)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+           if(category!=null){
+                category.status = false;
+                await _categoryService.Update(category);
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

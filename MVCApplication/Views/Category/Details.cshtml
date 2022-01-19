@@ -1,0 +1,72 @@
+@using Service.DTOs
+@model CategoryDTO
+
+
+<div class="modal-header">
+    <h5 class="modal-title">Thông tin tác giả</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form method="post" class="form" asp-controller="Category" asp-action="Edit" class="form-details">
+        <div class="form-group">
+            <label for="CategoryId">Mã thể loại</label>
+            <input id="CategoryId" class="form-control" type="text" value="@Model.id" readonly asp-for="@Model.id">
+        </div>
+        <div class="form-group">
+            <label for="CategoryName">Tên thể loại</label>
+            <input type="text" class="form-control" value="@Model.categoryName"  readonly
+                asp-for="@Model.categoryName">
+            
+        </div>
+        <div class="form-group">
+            <select class="form-control hide" aria-label="Default select example"
+                asp-for="@Model.status" readonly>
+                <option selected="@(Model.status== true ? "selected" : null)" value="true">
+                    Đang cộng tác
+                </option>
+                <option selected="@(Model.status== false ? "selected" : null)" value="false">
+                    Dừng cộng tác
+                </option>
+            </select>
+        </div>
+        <div class="modal-footer" style="text-align:center">
+            <button type="submit" class="btn btn-warning update-button">Cập nhật</button>
+            <div class="btn-group btn-group-update hide">
+                <button type="button" class="btn btn-secondary btn-cancel">Hủy</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+<script>
+    $(".update-button").click(function () {
+        $(this).addClass("hide");
+        $(".btn-group-update").removeClass("hide");
+        $(".form-control").each(function () {
+            if ($(this).prop('readonly') && !$(this).is('#CategoryId')) {
+                $(this).prop("readonly", false);
+            }
+        });
+        return false;
+    });
+
+    $(".btn-cancel").click(function () {
+        $(".btn-group-update").addClass("hide");
+        $(".update-button").removeClass("hide");
+        $(".form-details .form-control").each(function () {
+            if (!$(this).is('#CategoryId')) {
+                $(this).prop("readonly", true);
+            }
+        });
+        return false;
+    });
+
+</script>

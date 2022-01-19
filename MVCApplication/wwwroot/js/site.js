@@ -1,10 +1,4 @@
-﻿
-function CreateModal(url) {
-    $('.model-create').load(url);
-    $('.modalcreate').show();
-}
-
-function ValidateAuthor() {
+﻿function ValidateAuthor() {
     var authorName = $('#AuthorName');
     var authorNameError = $('.authorNameError');
     if (authorName.val() == null || authorName.val() == "") {
@@ -20,4 +14,8 @@ function ValidateAuthor() {
     }
 }
 
-
+function CreateModal(url) {
+    console.log(url);
+    $('.model-create').load(url);
+    $('.modalcreate').show();
+}
