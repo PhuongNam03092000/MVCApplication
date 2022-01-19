@@ -1,0 +1,145 @@
+﻿@using MVCApplication.Models
+@model AuthorViewModel
+@{
+    var tentgSort = (Model.SortOrder == "tentg") ? "tentg_desc" : "tentg";
+    var matgSort = (Model.SortOrder == "matg") ? "matg_desc" : "matg";
+}
+<div class="btn-group">
+    <button class="btn btn-success" data-toggle="modal" data-target="#addNewAuthor">
+        Thêm tác giả mới
+    </button>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="row row-header">
+            <div class="col col-lg-9">
+                Quản lý thông tin tác giả
+            </div>
+            <div class="col col-lg-3">
+                <!-- Topbar Search -->
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-2 small" placeholder="Tìm kiếm ..."
+                            aria-label="Search" aria-describedby="basic-addon2" asp-for="SearchString">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Mã tác giả
+                        &nbsp;
+                        <a asp-route-sortOrder="@matgSort" asp-route-searchString="@Model.SearchString">
+                            <i class="fas fa-sort"></i>
+                        </a>
+                    </th>
+                    <td>
+                        Tên tác giả &nbsp;
+                        <a asp-route-sortOrder="@tentgSort" asp-route-searchString="@Model.SearchString">
+                            <i class="fas fa-sort"></i>
+                        </a>
+                    </td>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.authors != null)
+                    {
+                        foreach (var author in Model.authors)
+                        {
+                            <tr>
+                                <td>@author.id</td>
+                                <td>@author.authorName</td>
+                                @if (@author.status == true)
+                                {
+                                    <td style="color:green">Đang cộng tác</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red">Dừng cộng tác</td>
+                                }
+
+                                <td class="btn-group btn-block btn-lg">
+                                    <button class="btn btn-warning" data-toggle="modal" data-target="#myModal" id="@author.id"
+                                onclick="CreateModal('@Url.Action("Details","Author",new {id = @author.id})')">
+                                        Chi tiết
+                                    </button>
+                                    <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" id="@author.id"
+                                onclick="CreateModal('@Url.Action("Delete","Author",new {authorId = @author.id})')">
+                                        Xóa
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var prevDisabled = !Model.authors.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.authors.HasNextPage ? "disabled" : "";
+    }
+    <div class="card-footer" style="text-align:center">
+        <a class="btn btn-default @prevDisabled" asp-route-sortOrder="@Model.SortOrder"
+            asp-route-searchString="@Model.SearchString"
+            asp-route-pageIndex="@(Model.authors.PageIndex -1)">Previous</a>
+        <a class="btn btn-default @nextDisabled" asp-route-sortOrder="@Model.SortOrder"
+            asp-route-searchString="@Model.SearchString" asp-route-pageIndex="@(Model.authors.PageIndex +1)">Next</a>
+    </div>
+</div>
+
+<!-- Add new Author Modal-->
+<div class="modal fade" id="addNewAuthor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Thêm một tác giả mới
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" class="form" asp-controller="Author" asp-action="Create">
+                    <div class="form-group">
+                        <label for="AuthorName">Tên tác giả</label>
+                        <input type="text" value="" id="AuthorName" class="form-control authorName"
+                            asp-for="@Model.author.authorName" />
+                        <span class="text-danger authorNameError"></span>
+
+                    </div>
+                    <div class="form-group" style="text-align:center">
+                        <button class="btn btn-dark" data-dismiss="modal">Hủy</button>
+                        <button class="btn btn-success" type="submit"
+                            onclick="return ValidateAuthor();">Thêm</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalcreate" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content model-create" id="modelContent">
+        </div>
+    </div>
+</div>

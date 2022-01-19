@@ -1,0 +1,45 @@
+@using Service.DTOs
+@model AuthorDTO
+<div class="modal-header">
+    <h5 class="modal-title">Xác nhận !</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseModal()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form method="post" class="form"  asp-controller="Author" asp-action="Delete" >
+        <div class="form-group delete-form-confirm" >
+            <label for="AuthorId">Mã tác giả</label>
+            <input id="AuthorId" class="form-control" type="text" value="@Model.id" 
+                   asp-for="@Model.id">
+        </div>
+        <div class="form-group delete-form-confirm">
+            <label for="AuthorName">Tên tác gỉa</label>
+            <input id="AuthorName" type="text" class="form-control" value="@Model.authorName"
+                   asp-for="@Model.authorName">
+        </div>
+        <div class="form-group delete-form-confirm">
+            <label for="AuthorStatus">Trạng thái</label>
+            <select id="AuthorStatus" class="form-control" aria-label="Default select example"
+                    asp-for="@Model.status">
+                <option selected="@(Model.status== true ? "selected" : null)" value="true">
+                    Đang cộng tác
+                </option>
+                <option selected="@(Model.status== false ? "selected" : null)" value="false">
+                    Dừng cộng tác
+                </option>
+            </select>
+        </div>
+        <h3>Bạn có muốn xóa tác giả này?</h3>
+        <div class="modal-footer" style="text-align:center">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CloseModal()">Hủy</button>
+            <button type="submit" class="btn btn-success" >Dồng ý</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .delete-form-confirm{
+        display:none;
+    }
+</style>
