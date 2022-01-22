@@ -48,7 +48,7 @@
                             <i class="fas fa-sort"></i>
                         </a>
                     </td>
-                    <th>Trạng thái</th>
+                    
                     <th></th>
                 </tr>
             </thead>
@@ -61,14 +61,7 @@
                             <tr>
                                 <td>@author.id</td>
                                 <td>@author.authorName</td>
-                                @if (@author.status == true)
-                                {
-                                    <td style="color:green">Đang cộng tác</td>
-                                }
-                                else
-                                {
-                                    <td style="color:red">Dừng cộng tác</td>
-                                }
+                              
 
                                 <td class="btn-group btn-block btn-lg">
                                     <button class="btn btn-warning" data-toggle="modal" data-target="#myModal" id="@author.id"

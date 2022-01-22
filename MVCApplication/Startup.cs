@@ -33,7 +33,10 @@ namespace MVCApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<MVCApplicatonDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("database")));
+            services.AddDbContext<MVCApplicatonDbContext>(options => {
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseSqlServer(Configuration.GetConnectionString("database"));
+            });
             services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<MVCApplicatonDbContext>()

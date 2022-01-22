@@ -37,7 +37,7 @@
                         Tên thể loại 
                         
                     </td>
-                    <th>Trạng thái</th>
+                   
                     <th></th>
                 </tr>
             </thead>
@@ -48,23 +48,16 @@
                         <tr>
                             <td>@category.id</td>
                             <td>@category.categoryName</td>
-                            @if (category.status == true)
-                            {
-                                <td style="color:green">Hiện có</td>
-                            }
-                            else
-                            {
-                                <td style="color:red">Không có</td>
-                            }
+                          
 
                             <td class="btn-group btn-block btn-lg">
                                 <button class="btn btn-warning" data-toggle="modal" data-target="#modalIdCategory"
                                         onclick="CreateModal('@Url.Action("Details","Category",new {id = category.id})')">
-                                    Details
+                                    Chi tiết
                                 </button>
                                 <button class="btn btn-danger" data-toggle="modal" data-target="#modalIdCategory"
                                         onclick="CreateModal('@Url.Action("Delete","Category",new { id = category.id })')">
-                                    Delete
+                                    Xóa
                                 </button>
                             </td>
 

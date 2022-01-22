@@ -30,6 +30,7 @@ namespace Infrastructure.Repositories
             }
 
             Sort(sortOrder, ref query);
+            query = query.Where(book => book.status==true);
             query = query.Include(book => book.listBookAuthor).ThenInclude(ba => ba.author);
             query = query.Include(book => book.listBookCategory).ThenInclude(ba => ba.category);
             count = query.Count();
@@ -99,6 +100,31 @@ namespace Infrastructure.Repositories
                     book.listBookCategory.Remove(bookcategory);
                 }
             }
+        }
+
+         public override Book GetById(int Id)
+        {
+            var book = _context.Books
+                    .Include(book => book.listBookAuthor.OrderBy(x => x.bookId))
+                    .Include(book => book.listBookCategory.OrderBy(x => x.categoryId))
+                    .AsSplitQuery()
+                    .OrderBy(item => item)
+                    .Single(book => book.id == Id)
+                    ;
+            return book;
+        }
+
+         public override async Task<bool> Update(Book book)
+        {
+
+            // lấy thông tin sách cũ
+            var bookTemp = GetById(book.id);
+            _context.Entry(bookTemp).State = EntityState.Modified;
+            UpdateBookAuthor(bookTemp, book.listBookAuthor.ToList());
+            UpdateBookCategory(bookTemp, book.listBookCategory.ToList());
+
+            var result = await _context.SaveChangesAsync();
+            return result > 0 ? true : false;
         }
 
     }

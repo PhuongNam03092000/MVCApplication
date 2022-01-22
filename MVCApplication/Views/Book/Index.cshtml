@@ -1,1 +1,207 @@
-﻿
+﻿@using MVCApplication.Models
+@using Service.Intefaces;
+@model BookViewModel;
+@inject IBookService _bookService;
+@* @{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var tensSort = (Model.SortOrder == "tens") ? "tens_desc" : "tens";
+    var masSort = (Model.SortOrder == "mas") ? "mas_desc" : "mas";
+    } *@
+
+<button class="btn btn-success" data-toggle="modal" data-target="#addNewBook">
+    <i class="fas fa-plus">&nbsp;Thêm</i>
+</button>
+<div class="modal fade" id="addNewBook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Thêm một sách mới
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" class="form" asp-controller="Book"
+                    asp-action="Create">
+                    <div class="row">
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label for="BookName">Tên sách</label>
+                                <input type="text" value="" id="BookName" class="form-control"
+                                    asp-for="@Model.book.nameOfBook" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Author">Tác giả</label>
+                                <select class="selectpicker form-control" multiple data-selected-text-format="value"
+                                    asp-for="@Model.Authors" asp-items="@(new
+                                    SelectList(ViewBag.AuthorList,"id","authorName"))">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Amount">Số lượng</label>
+                                <input type="number" id="AmountBook" class="form-control" asp-for="@Model.book.amount">
+                            </div>
+                        </div>
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label for="BookImage">Hình ảnh</label>
+                                <input type="file" id="BookImage" class="form-control" asp-for="@Model.book.image" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Category">Thể loại</label>
+                                <select class="selectpicker form-control" multiple data-selected-text-format="value"
+                                    asp-for="@Model.Categories"
+                                    asp-items="@(new SelectList(ViewBag.CategoryList,"id","categoryName"))">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Price">Giá tiền</label>
+                                <input type="number" id="PriceBook" class="form-control" asp-for="@Model.book.price">
+                            </div>
+
+                        </div>
+                        <div class="col col-lg-12">
+                            <div class="form-group">
+                                <label for="Content">Tóm tắt nội dung</label>
+                                <textarea class="form-control" asp-for="@Model.book.content" cols="10"
+                                    rows="10"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" style="text-align:center">
+                        <button class="btn btn-dark" data-dismiss="modal">Hủy</button>
+                        <button class="btn btn-success" type="submit" asp-controller="Book" asp-action="Create">
+                            Thêm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="row row-header">
+            <div class="col col-lg-9">
+                Quản lý thông tin sách
+            </div>
+            <div class="col col-lg-3">
+                <!-- Topbar Search -->
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-2 small" placeholder="Tìm kiếm ..."
+                            aria-label="Search" aria-describedby="basic-addon2" asp-for="SearchString">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-hover" style="text-align:match-parent;">
+            <thead>
+                <tr>
+                    <th>
+                        Mã sách
+                        &nbsp;
+                        @* <a asp-route-sortOrder="@masSort" asp-route-searchString="@Model.SearchString">
+                            <i class="fas fa-sort"></i>
+                            </a> *@
+                    </th>
+                    <td>
+                        Tên sách &nbsp;
+                        @* <a asp-route-sortOrder="@tensSort" asp-route-searchString="@Model.SearchString">
+                            <i class="fas fa-sort"></i>
+                            </a> *@
+                    </td>
+                    <td>Hình ảnh</td>
+                    <td>Tác giả</td>
+                    <td>Thể loại</td>
+                    <td>Số lượng</td>
+                    <td>Giá tiền</td>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    foreach (var book in Model.books)
+                    {
+                        <tr>
+                            <td>@book.id</td>
+                            <td>@book.nameOfBook</td>
+                            <td><img src="~/@book.fileImageUrl" alt="Alternate Text" style="width:100px;" /></td> 
+                            <td>
+                                @{
+                                    var AuthorNameList = "";
+                                    foreach (var bookauthor in book.listBookAuthor)
+                                    {
+                                        AuthorNameList = AuthorNameList + bookauthor.author.authorName;
+                                        AuthorNameList += ", ";
+                                    }
+                                }
+                                @AuthorNameList
+                            </td>
+                            <td>
+                                @{
+                                    var CategoryNameList = "";
+                                    foreach (var bookcategory in book.listBookCategory)
+                                    {
+                                        CategoryNameList = CategoryNameList + bookcategory.category.categoryName;
+                                        CategoryNameList = CategoryNameList + "\n";
+                                    }
+                                }
+                                @CategoryNameList
+                            </td>
+                            <td>@book.amount</td>
+                            <td>
+                                @{
+                                    String price = "";
+                                    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                    price = String.Format(info, "{0:c}", @book.price);
+                                }
+                                @price
+                            </td>
+
+                            <td>
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#modelIdBook" id="@book.id"
+                                onclick="CreateModal('@Url.Action("Details","Book",new {id = @book.id})')">
+                                    Chi tiết
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @{
+        var prevDisabled = !Model.books.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.books.HasNextPage ? "disabled" : "";
+    }
+    <div class="card-footer" style="text-align:center">
+        <a class="btn btn-default @prevDisabled" asp-route-sortOrder="@Model.SortOrder"
+            asp-route-searchString="@Model.SearchString" asp-route-pageIndex="@(Model.books.PageIndex -1)">Previous</a>
+        <a class="btn btn-default @nextDisabled" asp-route-sortOrder="@Model.SortOrder"
+            asp-route-searchString="@Model.SearchString" asp-route-pageIndex="@(Model.books.PageIndex +1)">Next</a>
+    </div>
+</div>
+
+<div class="modal fade modalcreate" id="modelIdBook" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content model-create" >
+        </div>
+    </div>
+</div>

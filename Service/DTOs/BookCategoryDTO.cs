@@ -11,7 +11,7 @@ namespace Service.DTOs
     {
         public int bookId { get; set; }
         public int categoryId { get; set; }
-        public Book book { get; set; }
-        public Category category {get;set;}
+        public BookDTO book { get; set; }
+        public CategoryDTO category {get;set;}
     }
 }

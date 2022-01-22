@@ -63,9 +63,9 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<Author>, IEnumerable<AuthorDTO>>(_iauthorRepository.GetAll()).ToList();
         }
 
-        public async Task<AuthorDTO> GetById(int id)
+        public AuthorDTO GetById(int id)
         {
-            var author = await _iauthorRepository.GetById(id);
+            var author  = _iauthorRepository.GetById(id);
             return _mapper.Map<Author, AuthorDTO>(author);
         }
 

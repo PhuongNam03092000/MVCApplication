@@ -14,6 +14,6 @@ namespace Service.Intefaces
         Task<bool> Create(CategoryDTO entity);
         Task<bool> Update(CategoryDTO entity);
         bool Delete(int id);
-        Task<CategoryDTO> GetById(int id);
+        CategoryDTO GetById(int id);
     }
 }

@@ -1,0 +1,105 @@
+@using MVCApplication.Models
+@model BookViewModel
+
+
+<div class="modal-header">
+    <h5 class="modal-title">Thông tin sách</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" onclick="CloseModal()">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form method="post" class="form editForm" asp-controller="Book" asp-action="Edit">
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label for="BookID">Mã sách</label>
+                    <input class="form-control" asp-for="@Model.book.id" />
+                </div>
+                <div class="form-group">
+                    <label for="BookName">Tên sách</label>
+                    <input id="BookName" class="form-control" asp-for="@Model.book.nameOfBook" />
+                </div>
+            </div>
+            <div class="col col-lg-6" style="text-align:center;">
+                <img src="~/@Model.book.fileImageUrl" alt="Alternate Text" style="width:150px;">
+                <input type="text" style="display:none;" asp-for="@Model.book.image">
+                @* <input type="file" id="BookImage" class="form-control" asp-for="@Model.Book.Image"
+                    value="@Model.Book.ImageUrl" /> *@
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label for="BookCategory">Thể loại</label>
+                    <select class="selectpicker form-control show-tick" multiple data-selected-text-format="value"
+                        data-live-search="true" asp-for="@Model.Categories" asp-items="@(new SelectList(ViewBag.CategoryList, "id",
+                        "categoryName"))">
+                    </select>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label for="BookAuthor">Tác giả</label>
+                    <select class="selectpicker form-control show-tick" multiple data-selected-text-format="value"
+                        data-live-search="true" asp-for="@Model.Authors" asp-items="@(new SelectList(ViewBag.AuthorList, "id",
+                        "authorName"))">
+                    </select>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label for="BookPrice">Giá tiền</label>
+                    <input type="number" asp-for="@Model.book.price" class="form-control" />
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label for="BookAmount">Số lượng</label>
+                    <input type="number" asp-for="@Model.book.amount" class="form-control" />
+                </div>
+            </div>
+            <div class="col col-lg-12">
+                <div class="form-group">
+                    <label for="BookContent">Tóm tắt nội dung</label>
+                    <textarea class="form-control" asp-for="@Model.book.content" cols="10" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="col col-lg-12">
+                <div class="form-group" style="text-align:center">
+                    <button type="submit" class="btn btn-warning update-button">Cập nhật</button>
+                    <div class="btn-group btn-group-update hide">
+                        <button type="button" class="btn btn-secondary btn-cancel">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+<script>
+
+     $(".update-button").click(function () {
+        $(this).addClass("hide");
+        $(".btn-group-update").removeClass("hide");
+        $(".form-control").each(function () {
+            if ($(this).prop('readonly') && !$(this).is('#AuthorId')) {
+                $(this).prop("readonly", false);
+            }
+        });
+        return false;
+    });
+     $(".btn-cancel").click(function () {
+        $(".btn-group-update").addClass("hide");
+        $(".update-button").removeClass("hide");
+        $(".form-control").each(function () {
+            if (!$(this).is('#BookId')) {
+                $(this).prop("readonly", true);
+            }
+        });
+        return false;
+    });
+</script>

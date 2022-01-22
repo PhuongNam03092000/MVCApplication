@@ -11,8 +11,8 @@ namespace Service.Intefaces
     {
         IList<BookDTO> GetAll();
         IList<BookDTO> Filter(string sortOrder, string searchString, int pageIndex, int pageSize, out int count);
-        bool Create(BookDTO entity);
-        bool Update(BookDTO entity);
+        Task<bool> Create(BookDTO entity);
+        Task<bool> Update(BookDTO entity);
         bool Delete(int id);
         BookDTO GetById(int id);
     }

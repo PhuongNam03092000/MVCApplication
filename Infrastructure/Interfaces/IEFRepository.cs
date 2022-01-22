@@ -12,6 +12,6 @@ namespace Infrastructure.Interfaces
         Task<bool> Create(T entity);
         Task<bool> Update(T entity);
         bool Delete(int id);
-        Task<T> GetById(int id);
+        T GetById(int id);
     }
 }

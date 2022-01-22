@@ -52,12 +52,12 @@ namespace Service.Services
 
         public IList<CategoryDTO> GetAll()
         {
-            throw new NotImplementedException();
+           return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(_icategoryRepository.GetAll()).ToList();
         }
 
-        public async Task<CategoryDTO> GetById(int id)
+        public CategoryDTO GetById(int id)
         {
-           var category = await _icategoryRepository.GetById(id);
+           var category =  _icategoryRepository.GetById(id);
            return _mapper.Map<Category,CategoryDTO>(category);
         }
 

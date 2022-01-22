@@ -34,17 +34,18 @@ namespace Infrastructure.Repositories
             return _context.Set<T>().ToList();
         }
 
-        public async Task<T> GetById(int id)
+        public virtual T GetById(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return  _context.Set<T>().Find(id);
         }
 
-        public async Task<bool> Update(T entity)
+        public virtual async Task<bool> Update(T entity)
         {
             _context.Set<T>();
             _context.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
             var result = await _context.SaveChangesAsync();
+        
             return result > 0 ? true : false;
         }
     }

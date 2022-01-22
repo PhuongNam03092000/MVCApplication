@@ -34,9 +34,9 @@ namespace MVCApplication.Controllers
             };
             return View(vm);
         }
-        public async Task<ActionResult> Details(int id)
+        public ActionResult Details(int id)
         {
-            var author = await _authorService.GetById(id);
+            var author = _authorService.GetById(id);
             return PartialView(@"~/Views/Author/Details.cshtml", author);
         }
 
@@ -68,9 +68,9 @@ namespace MVCApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<ActionResult> Delete(int authorId)
+        public ActionResult Delete(int authorId)
         {
-            var author = await _authorService.GetById(authorId);
+            var author =  _authorService.GetById(authorId);
             return PartialView(@"~/Views/Author/DeleteConfirm.cshtml",author);
         }
 

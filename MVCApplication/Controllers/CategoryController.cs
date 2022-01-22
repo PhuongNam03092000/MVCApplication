@@ -33,9 +33,9 @@ namespace MVCApplication.Controllers
         }
 
         // GET: CategoryController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public ActionResult Details(int id)
         {
-            var category = await _categoryService.GetById(id);
+            var category = _categoryService.GetById(id);
             return PartialView(@"~/Views/Category/Details.cshtml", category);
         }
 
@@ -61,9 +61,9 @@ namespace MVCApplication.Controllers
         }
 
         // GET: CategoryController/Delete/5
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var categroy = await _categoryService.GetById(id);
+            var categroy = _categoryService.GetById(id);
             if(categroy!=null){
                   return PartialView(@"~/Views/Category/DeleteConfirm.cshtml",categroy);
             }

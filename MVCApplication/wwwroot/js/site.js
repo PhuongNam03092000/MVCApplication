@@ -15,7 +15,10 @@
 }
 
 function CreateModal(url) {
+    $('.selectpicker').selectpicker();
     console.log(url);
-    $('.model-create').load(url);
+    $('.model-create').load(url,function(){
+        $('.selectpicker').selectpicker();
+    });   
     $('.modalcreate').show();
 }
