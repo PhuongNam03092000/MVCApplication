@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVCApplication.Models;
 using Service.DTOs;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MVCApplication.Controllers
 {
+    [Authorize]
     public class BookController : Controller
     {
         private readonly IBookService _bookService;

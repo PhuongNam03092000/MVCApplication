@@ -4,6 +4,7 @@ using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,6 @@ namespace MVCApplication
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 options.UseSqlServer(Configuration.GetConnectionString("database"));
             });
-            services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<MVCApplicatonDbContext>()
                     .AddDefaultTokenProviders();
@@ -57,6 +57,12 @@ namespace MVCApplication
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "MVCApplicationCookie";
+                config.LoginPath = new PathString("/Account/Login");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,14 +82,14 @@ namespace MVCApplication
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Book}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}");
             });
         }
     }

@@ -1,0 +1,35 @@
+﻿<div class="card">
+    <div class="card-header">My Register Form</div>
+    <div class="card-body">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.Label("Username")
+                @Html.TextBox("usernameRegister","", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.Label("Password")
+                @Html.TextBox("passwordRegister","", new { @class = "form-control",Type = "password" })
+            </div>
+            <button class="btn btn-primary btn-block " type="submit" onclick="return ValidateRegisterForm();">Register</button>
+
+        }     
+    </div>
+</div>
+<script>
+    function ValidateRegisterForm() {
+        var username = $('#usernameRegister');
+        var password = $('#passwordRegister');
+        if (username.val() == null || username.val() == "") {
+            alert("Username");
+            return false;
+        } else{
+            if (password.val() == null || password.val() == "") {
+                alert("Password");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+</script>

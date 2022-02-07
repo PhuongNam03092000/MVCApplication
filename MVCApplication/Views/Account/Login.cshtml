@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using Service.DTOs
+@model LoginDTO
+<div class="card">
+    <div class="card-header">My Login Form</div>
+    <div class="card-body">
+        @if (@ViewBag.Error != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.Error
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        <form method="post" asp-controller="Account" asp-action="Login">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="usernameLogin" class="form-control" asp-for="@Model.username" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="passwordLogin" class="form-control" asp-for="@Model.password" />
+            </div>
+            <div class="form-group">
+                <div class="btn-group btn-block">
+                    <button class="btn btn-success" type="submit" onclick="return ValidateLoginForm();">Login</button>
+                    <button class="btn btn-primary " asp-controller="Account" asp-action="Register">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function ValidateLoginForm() {
+        var username = $("#usernameLogin");
+        var password = $("#passwordLogin");
+        if (username.val() == null || username.val() == "") {
+            alert("Username is empty");
+            return false;
+        } else {
+            if (password.val() == null || password.val() == "") {
+                alert("Password is empty");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+</script>
